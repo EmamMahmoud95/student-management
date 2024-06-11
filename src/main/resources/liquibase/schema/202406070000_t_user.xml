@@ -1,0 +1,37 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet author="Emam Mahmoud" id="202406070000_seq_t_user_sequence">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="seq_t_user_sequence" schemaName="student_management"/>
+            </not>
+        </preConditions>
+
+        <createSequence sequenceName="seq_t_user_sequence" schemaName="student_management"
+                        incrementBy="1"/>
+    </changeSet>
+
+    <changeSet author="Emam Mahmoud" id="202406070000_t_user">
+        <createTable tableName="t_user">
+            <column name="id" type="BIGINT" valueSequenceNext="seq_t_user_sequence">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="t_user_sequence_pkey"/>
+            </column>
+            <column name="USERNAME" type="varchar2(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="USER_TYPE" type="varchar2(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PASSWORD" type="varchar2(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+    </changeSet>
+
+</databaseChangeLog>

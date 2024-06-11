@@ -1,0 +1,288 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: student management system
+  description: This API allows student to signup and login and to find and register to a course also can cancel course and view course schedule as PDF.
+servers:
+  - url: http://localhost:8080
+
+security:
+  - Bearer: []
+paths:
+  /signup:
+    post:
+      operationId: signup
+      summary: Create a new student.
+      description: This endpoint allows student to signup to the system .
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Student'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+      tags:
+        - students
+  /login:
+    post:
+      operationId: login
+      summary: Authenticate a student.
+      description: This endpoint allows student to authenticate and receive a Bearer token.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Credentials'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Unauthorized
+      tags:
+        - students
+  /auth/refresh-token:
+    post:
+      summary: refresh the user jwt token.
+      description: This endpoint allows student to authenticate and receive a Bearer token from the refresh token.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshToken'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Unauthorized
+      tags:
+        - students
+
+  /course:
+    get:
+      operationId: getAllCourses
+      summary: get existing courses.
+      description: get all existing courses for the authenticate student.
+      parameters:
+        - name: page
+          in: query
+          description: the page of the courses to be loaded
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: the size page of the courses to be loaded
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: successful response with the loaded courses
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoursePage'
+      tags:
+        - courses
+
+  /course/{courseId}/register:
+    post:
+      operationId: registerToCourse
+      summary: register to course
+      description: register to the given course id for the logged in student
+      parameters:
+        - name: courseId
+          in: path
+          description: ID of the course
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: the register to course done successfully.
+
+      tags:
+        - courses
+  /course/{courseId}/cancel:
+    delete:
+      operationId: cancelCourse
+      summary: cancel the course register
+      description: cancel the given course registration for the logged in student
+      parameters:
+        - name: courseId
+          in: path
+          description: ID of the course
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: the register to course done successfully.
+
+      tags:
+        - courses
+  /course/registed/export:
+    get:
+      operationId: exportRegisteredCourses
+      summary: export all courses Registered by the student
+      description: export all courses Registered by the student
+      responses:
+        '200':
+          description: return pdf file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+      tags:
+        - courses
+
+components:
+  schemas:
+    Student:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          maxLength: 100
+        password:
+          type: string
+          minLength: 8
+    Credentials:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          format: string
+          maxLength: 100
+        password:
+          type: string
+          minLength: 8
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        tokenType:
+          type: string
+    RefreshToken:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+    CoursePage:
+      type: object
+      properties:
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+          format: int64
+        courses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Course'
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        instructorName:
+          type: string
+        duration:
+          type: integer
+        date:
+          type: string
+          format: date
+
+
+
+
+
+    EventRequestDTO:
+      type: object
+      required:
+        - name
+        - date
+        - availableAttendeesCount
+        - description
+        - category
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        date:
+          type: string
+          format: date
+        availableAttendeesCount:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        description:
+          type: string
+          maxLength: 500
+        category:
+          $ref: '#/components/schemas/Category'
+    EventResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        date:
+          type: string
+          format: date
+        availableAttendeesCount:
+          type: integer
+        description:
+          type: string
+        category:
+          $ref: '#/components/schemas/Category'
+    TicketRequest:
+      type: object
+      required:
+        - attendeesCount
+      properties:
+        attendeesCount:
+          type: integer
+          minimum: 1
+    Category:
+      type: string
+      enum:
+        - Concert
+        - Conference
+        - Game
+  securitySchemes:
+    Bearer:
+      type: apiKey
+      name: Authorization
+      in: header

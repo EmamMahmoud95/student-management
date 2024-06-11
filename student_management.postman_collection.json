@@ -1,0 +1,331 @@
+{
+	"info": {
+		"_postman_id": "93259629-10a6-4db5-9bdc-1cc4ed7da78c",
+		"name": "student_management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25305037"
+	},
+	"item": [
+		{
+			"name": "add student",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"emam\",\r\n    \"password\": \"EmamDodo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseData=pm.response.json();\r",
+							"console.log(responseData.access_token);\r",
+							"pm.globals.set(\"student_management_access_token\", responseData.accessToken);\r",
+							"pm.globals.set(\"student_management_refresh_token\", responseData.refreshToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"emam_mm\",\r\n    \"password\": \"EmamDodo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "refresh token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseData=pm.response.json();\r",
+							"console.log(responseData.access_token);\r",
+							"pm.globals.set(\"student_management_access_token\", responseData.accessToken);\r",
+							"pm.globals.set(\"student_management_refresh_token\", responseData.refreshToken);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refreshToken\": {{student_management_refresh_token}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth/refresh-token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth",
+						"refresh-token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get courses",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzUxMiJ9.eyJpc3MiOiJib3VieWFuIiwic3ViIjoiZW1hbSIsInVzZXItaW5mb3JtYXRpb24iOnsiaWQiOjN9LCJpYXQiOjE3MTc4NTExMjMsImV4cCI6MTcxNzg1NDc4M30.ZvEDEGGsAPiVAdJWcTKVENsCB5lq6i323rflEHmqs6BPdR8qt46Ll9sGgLQs8HVoNtI_iM6Pp16XgXoXP4Tde3RneAKXR7kpiAObEb8gIccnydvuQTZECysJEoxrzBSKomk6behbyB5Iz7J5IanOINDIId_LXchXAJC96vUQUee1WYcFHDeQJYlxzjl2yuCb3bkKAMK8jnZl71WH0QEwONv1HPEWuxHtY1S9xMctRp4fD_P0y6faxtILu0yQHgy4aRtx9nXPW2AS9oL8h2QuyhX9WuOsFgXKrYjNIk8kDpRjPUumAOhaFxweD7ruCVJAGWp5-WaJitLB3qywWvZvQA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/course",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register course",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzUxMiJ9.eyJpc3MiOiJib3VieWFuIiwic3ViIjoiZW1hbTEiLCJ1c2VyLWluZm9ybWF0aW9uIjp7ImlkIjoyMX0sImlhdCI6MTcxNzkyNjg0OCwiZXhwIjoxNzE3OTMwNTA4fQ.CgmIUCSwZpjEm1fae-zlEUGSbKqtFBTsJ2UTOdMLujOTGFL41vb_iosgaXR33BdQFz9SaZDUDJcr-DzvEKoV9xbH-LR6YxJyw7-QB4NHLT-dukZ0wOHjydDVeXrzpCIRolvt2G7fVobNk9oTIDg34XhQzvy0iZ7GT6NBdJdHaso97lBhV_76zBLZka3F1v2Umu9xlcJK04APFFzQ6vpvjr7BQQxyverJdY59uOWWmHsXhXglrpBvNoiRPS8UURxjTMsD7IDErLzRU8T54Tcc7pfexYhjs2e1TAo8fjFh28BW7JGOzYrWrgZ1Ovbc3RiMFh2xpk_zZMYQ7ak5mmg29g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/course/2/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						"2",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cancel course",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{student_management_access_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/course/2/cancel",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						"2",
+						"cancel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "registered courses export",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzUxMiJ9.eyJpc3MiOiJib3VieWFuIiwic3ViIjoiZW1hbTEiLCJ1c2VyLWluZm9ybWF0aW9uIjp7ImlkIjoyMX0sImlhdCI6MTcxNzkyNjg0OCwiZXhwIjoxNzE3OTMwNTA4fQ.CgmIUCSwZpjEm1fae-zlEUGSbKqtFBTsJ2UTOdMLujOTGFL41vb_iosgaXR33BdQFz9SaZDUDJcr-DzvEKoV9xbH-LR6YxJyw7-QB4NHLT-dukZ0wOHjydDVeXrzpCIRolvt2G7fVobNk9oTIDg34XhQzvy0iZ7GT6NBdJdHaso97lBhV_76zBLZka3F1v2Umu9xlcJK04APFFzQ6vpvjr7BQQxyverJdY59uOWWmHsXhXglrpBvNoiRPS8UURxjTMsD7IDErLzRU8T54Tcc7pfexYhjs2e1TAo8fjFh28BW7JGOzYrWrgZ1Ovbc3RiMFh2xpk_zZMYQ7ak5mmg29g",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "device-id",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/course/registed/export",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						"registed",
+						"export"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
